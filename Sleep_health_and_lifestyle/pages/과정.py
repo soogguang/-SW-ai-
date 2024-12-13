@@ -1,5 +1,5 @@
 import streamlit as st
-
+st.title("사용하기위한 데이터셋을 만드는 과정")
 st.set_page_config(layout="wide")
 
 # 이미지 파일 경로

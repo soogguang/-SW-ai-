@@ -1,8 +1,7 @@
 import streamlit as st
 
-pdf_path = "Sleep_health_and_lifestyle/pages/Notebooks.pdf"
-with open(pdf_path, "rb") as pdf_file:
-    pdf_bytes = pdf_file.read()
+# 이미지 파일 경로
+image_path = "/Users/jangsooin/Library/Mobile Documents/com~apple~CloudDocs/숭실대학교/숭실대학교(1-2)/AI와데이터기초/프로젝트/pages/Notebooks_page.jpg"  # 실제 이미지 파일 경로를 입력하세요.
 
-st.download_button(label="Download PDF", data=pdf_bytes, file_name="Notebooks.pdf")
-st.markdown(f'<iframe src="{pdf_path}" width="700" height="900"></iframe>', unsafe_allow_html=True)
+# 이미지 표시
+st.image(image_path, caption="Smart Bug Trap 이미지", use_container_width=True)

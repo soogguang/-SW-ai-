@@ -170,7 +170,9 @@ def plot_combined_scatter():
 # 그래프 그리기 함수 호출
 plot_combined_scatter()
 
-
+# 공간 띄우기
+st.write("")
+st.write("")
 
 # 숙면을 위한 팁
 container = st.container()

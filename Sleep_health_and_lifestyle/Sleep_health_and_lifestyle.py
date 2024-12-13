@@ -28,7 +28,7 @@ st.write("")
 st.write("")
 
 # 데이터 로드
-data = pd.read_csv("Sleep_health_and_lifestyle_dataset.csv")
+data = pd.read_csv("Sleep_health_and_lifestyle/Sleep_health_and_lifestyle_dataset.csv")
 
 
 # 'Quality of Sleep'에 따라 평균값을 계산

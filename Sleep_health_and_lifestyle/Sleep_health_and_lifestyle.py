@@ -30,11 +30,9 @@ st.write("")
 # 데이터 로드
 data = pd.read_csv("Sleep_health_and_lifestyle_dataset.csv")
 
-# 수치형 데이터만 추출
-numeric_columns = data.select_dtypes(include=['float64', 'int64']).columns
 
 # 'Quality of Sleep'에 따라 평균값을 계산
-average_values = data.groupby('Quality of Sleep')[numeric_columns].mean()
+average_values = data.groupby('Quality of Sleep').mean()
 
 # 중요한 열을 강조하기 위한 색상 설정
 def highlight_columns(s):

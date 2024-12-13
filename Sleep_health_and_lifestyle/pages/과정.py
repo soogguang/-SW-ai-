@@ -1,6 +1,8 @@
-from PIL import Image
 import streamlit as st
 
-# 스크린샷 이미지 파일을 대시보드에 표시
-image = Image.open("Sleep_health_and_lifestyle/pages/Notebooks.pdf")
-st.image(image, caption="숙면을 위한 팁", use_column_width=True)
+pdf_path = "Sleep_health_and_lifestyle/pages/Notebooks.pdf"
+with open(pdf_path, "rb") as pdf_file:
+    pdf_bytes = pdf_file.read()
+
+st.download_button(label="Download PDF", data=pdf_bytes, file_name="Notebooks.pdf")
+st.markdown(f'<iframe src="{pdf_path}" width="700" height="900"></iframe>', unsafe_allow_html=True)

@@ -22,7 +22,7 @@ st.markdown("""수면 질은 건강에 많은 영향을 미칩니다.<br>
             , unsafe_allow_html=True)
 
 # 데이터 로드
-data = pd.read_csv("Sleep_health_and_lifestyle_dataset.csv")  # 데이터셋 로드
+data = pd.read_csv("Sleep_health_and_lifestyle/Sleep_health_and_lifestyle_dataset.csv")  # 데이터셋 로드
 
 # 'Quality of Sleep'에 따른 평균값 계산
 average_values = data.groupby('Quality of Sleep').mean()  # 수면 품질에 따라 평균 계산

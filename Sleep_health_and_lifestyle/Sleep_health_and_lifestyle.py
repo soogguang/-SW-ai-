@@ -150,6 +150,9 @@ st.write("")
 st.write("")
 st.subheader("요인별 Quality of Sleep의 결합 산점도 ➕")
 plot_combined_scatter(data)
+st.markdown("""
+세가지 요인과 수면의 질(Quality of Sleep)을 한 그래프로 확인한 결과 다음과 같은 관계를 한 눈에 확인할 수 있다.
+""")
 
 # 숙면 팁 제공
 st.write("")

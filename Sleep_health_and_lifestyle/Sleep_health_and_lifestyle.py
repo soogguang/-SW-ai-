@@ -1,180 +1,159 @@
+# 라이브러리 임포트
 import pandas as pd
 import matplotlib.pyplot as plt
 import streamlit as st
 import seaborn as sns
-import streamlit.components.v1 as components
 import plotly.express as px
-
+import numpy as np
 
 # Streamlit 페이지 설정
-st.set_page_config(page_title="수면 건강 및 라이프스타일 데이터셋 정리", layout="wide", menu_items={
-         'About': """# AI와데이터기초 프로젝트   
-         AI융합학부 
-         김지율 장수인 최희우"""
-     })
-st.title("수면 건강 및 라이프스타일 데이터셋 📊")
+st.set_page_config(page_title="수면 건강 및 라이프스타일 데이터셋 정리", 
+                   layout="wide", 
+                   menu_items={
+                       'About': """# AI와데이터기초 프로젝트   
+                                  AI융합학부 
+                                  김지율 장수인 최희우"""
+                   })
+st.title("수면 건강 및 라이프스타일 데이터셋 📊")  # 앱 제목 표시
 
-
-# 동기
+# 프로젝트 동기 설명
 st.markdown("""수면 질은 건강에 많은 영향을 미칩니다.<br>
             수면의 질을 높이기 위하여 어떤 요소가 영향을 미치는 지를 데이터들을 정리해서 알아내는 작업은 꼭 필요하다고 생각했습니다."""
-            ,unsafe_allow_html=True)
-st.markdown("""일단 Quality of Sleep에 따른 다른 요소들의 데이터의 평균을 구해보았습니다.""")
-
-
-# 공간 띄우기
-st.write("")
-st.write("")
-st.write("")
-
-# 데이터 로드
-data = pd.read_csv("Sleep_health_and_lifestyle/Sleep_health_and_lifestyle_dataset.csv")
-
-
-# 'Quality of Sleep'에 따라 평균값을 계산
-average_values = data.groupby('Quality of Sleep').mean()
-
-# 중요한 열을 강조하기 위한 색상 설정
-def highlight_columns(s):
-    color = 'background-color: #99CCFF'
-    return [color if col in important_columns else '' for col in s.index]
-
-# 강조할 열 설정
-important_columns = ['Sleep Duration', 'Stress Level', 'Heart Rate']  
-
-# 데이터프레임에 스타일 적용
-average_values = average_values.style.apply(highlight_columns, axis=1)
-
-# 평균 낸 표
-st.subheader(" Quality of Sleep에 따른 평균 값 😪")
-st.write(average_values)
-
-
-st.markdown("""같은 Quality of sleep 값에 따라 칼럼값의 평균을 구했고 그에 따라 각각의 관계가 존재함을 알아내었습니다.""") 
-st.markdown("""특히 **'Sleep** **Duration',** **'Stress** **Level',** **'Heart** **Rate'** 의 평균값들이 Quality of sleep과 눈에 띄는 관계를 보였습니다.""")
-st.write("")
-st.write("")
-st.write("")
-
-
-
-# 수면시간과 수면의 질의 상관관계 Part
-# 박스 플롯
-fig = px.box(
-    data,
-    x='Quality of Sleep',  # 수면 품질을 x축에 배치
-    y='Sleep Duration',    # 수면 시간을 y축에 배치
-    color='Quality of Sleep',  # 수면 품질에 따라 색상 구분
-    points='all',  # 데이터 포인트를 모두 표시
-    title='Distribution of Sleep Duration by Quality of Sleep',
-    labels={
-        'Quality of Sleep': 'Quality of Sleep',
-        'Sleep Duration': 'Sleep Duration (hours)'
-    }
-)
-
-fig.update_layout(
-    title_font={'size': 25},
-    xaxis_title='Quality of Sleep',
-    yaxis_title='Sleep Duration (hours)'
-)
-
-#fig.show()
-
-# 타이틀
-st.subheader('Quality of Sleep과 Sleep Duration 분석 🌀')
-st.markdown('수면 시간과 수면의 질의 상관관계를 구합니다.')
-
-st.plotly_chart(fig)
-
-#설명글
-st.markdown('''수면 시간이 너무 짧거나 지나치게 길면 수면의 질이 떨어질 수 있다는 패턴이 있습니다.<br>
-            또한, 수면 시간이 7-9시간일 때 수면의 질이 높음을 알 수 있습니다.<br>
-            그러므로 수면 시간과 수면의 질이 상관관계가 있다는 것을 알 수 있습니다.'''
             , unsafe_allow_html=True)
 
+# 데이터 로드
+data = pd.read_csv("Sleep_health_and_lifestyle_dataset.csv")  # 데이터셋 로드
 
-# 공간 띄우기
-st.write("")
-st.write("")
-st.write("")
+# 'Quality of Sleep'에 따른 평균값 계산
+average_values = data.groupby('Quality of Sleep').mean()  # 수면 품질에 따라 평균 계산
 
+# 중요한 열 강조
+important_columns = ['Sleep Duration', 'Stress Level', 'Heart Rate']
+def highlight_columns(s):
+    color = 'background-color: #99CCFF'  # 강조할 셀의 배경색 설정
+    return [color if col in important_columns else '' for col in s.index]
 
-# 스트레스 수준, 수면 시간, 심박수에 따른 수면의 질 산점도 Part
-def plot_scatter(x, y='Quality of Sleep', xlabel='', ylabel='Quality of Sleep'):
-    plt.figure(figsize=(6, 2))
-    sns.scatterplot(x=x, y=y, data=data)
-    plt.xlabel(xlabel)
-    plt.ylabel(ylabel)
-    plt.title(f'{ylabel} by {xlabel}')
+# 강조된 스타일 적용
+average_values = average_values.style.apply(highlight_columns, axis=1)
+
+# 평균 테이블 출력
+st.subheader("Quality of Sleep에 따른 평균 값 😪")
+st.write(average_values)
+
+st.markdown("""같은 Quality of Sleep 값에 따라 각 칼럼의 평균을 계산했습니다. 
+특히 **'Sleep Duration'**, **'Stress Level'**, **'Heart Rate'** 값들이 눈에 띄는 관계를 보였습니다.""")
+
+# 특정 변수와 수면의 질 간의 산점도와 추세선 그리는 함수 정의
+# 순서대로 색, x축, (y축), (데이터)를 입력받아 사용하는 함수 -> 뒤에 두 정보는 기본값이 있기 때문에 입력하지 않아도 된다.
+def plot_scatter_with_trend(color_c, x_label, x, y='Quality of Sleep', data=data):
+
+    plt.figure(figsize=(15, 6))  # 그래프 크기 설정
+    x_data = data[x]  # x축 데이터 설정 : 입력된 x값
+    y_data = data[y]  # y축 데이터 설정 : 'Quality of Sleep'
+
+    # 산점도 생성
+    plt.scatter(x_data, y_data, color=color_c, label=f"{y} vs {x}", alpha=0.7)
+    # 다른 그래프들과 차이점을 주고, 요인별 Quality of Sleep의 결합 산점도에서 확인이 편하도록 색(color_c)을 지정해준다.
+
+    # 1차 회귀선(추세선) 추가
+    z = np.polyfit(x_data, y_data, 1)
+    p = np.poly1d(z)
+    plt.plot(x_data, p(x_data), color='red', linestyle='--', label='Trend Line')
+
+    # 축 레이블 및 제목 설정
+    plt.xlabel(x_label, fontsize=12)
+    plt.ylabel(y, fontsize=12)
+    plt.title(f'Scatter Plot of {y} vs {x} with Trend Line', fontsize=14)
+    plt.legend(fontsize=10)
+    plt.grid(True)
+
+    # 그래프 출력
+    st.write("")
     st.pyplot(plt)
 
-
-# 스트레스 수준에 따른 수면의 질
-st.subheader(" Stress Level과 Quality of Sleep의 관계 💢")
-plot_scatter('Stress Level', xlabel='Stress Level')
-
-# 공간 띄우기
+# 플롯 출력
 st.write("")
 st.write("")
+st.subheader('Quality of Sleep과 Sleep Duration 분석 🌀')
+plot_scatter_with_trend('green', 'Sleep Duration(h)', 'Sleep Duration')
+
+# 상관관계 해석
+st.markdown('''
+수면 시간이 너무 짧으면 수면의 질이 떨어질 수 있다는 패턴이 관찰됩니다.<br>
+7-9시간의 수면 시간이 가장 높은 수면의 질을 보였습니다.<br>
+<u>추세선을 보았을 때에도 수면 시간이 높을 수록 수면의 질이 높아진다는 것을 예측할 수 있습니다.</u><br>
+따라서 수면 시간과 수면의 질 사이에는 상관관계가 존재한다고 결론지을 수 있습니다.
+''', unsafe_allow_html=True)
+
+
+
+# 스트레스 수준과 수면의 질 관계 시각화
 st.write("")
+st.write("")
+st.subheader("Stress Level과 Quality of Sleep의 관계 💢")
+plot_scatter_with_trend('blue', 'Stress Level(1~10lv)', 'Stress Level')  # 스트레스 수준과 수면의 질 그래프 생성
 
-# 심박수에 따른 수면의 질
-st.subheader(" Heart Rate과 Quality of Sleep의 관계 ❤️‍🔥")
-plot_scatter('Heart Rate', xlabel='Heart Rate (bpm)')
+# 상관관계 해석
+st.markdown('''
+스트레스 지수가 높을 수록 수면의 질이 떨어질 수 있다는 패턴이 관찰됩니다.<br>
+<u>추세선으로 보았을 때 스트레스 지수가 낮을 수록 수면의 질이 높아질 것으로 예측됩니다.</u><br>
+따라서 스트레스 지수과 수면의 질 사이에는 상관관계가 존재한다고 결론지을 수 있습니다.
+''', unsafe_allow_html=True)
 
-# 공간 띄우기
+# 심박수와 수면의 질 관계 시각화
 st.write("")
 st.write("")
-st.write("")
+st.subheader("Heart Rate와 Quality of Sleep의 관계 ❤️‍🔥")
+plot_scatter_with_trend('red', 'Heart Rate(bpm)', 'Heart Rate')  # 심박수와 수면의 질 그래프 생성
 
-# 서브헤더
-st.subheader(" 요인별 Quality of Sleep의 결합 산점도 ➕") 
+# 상관관계 해석
+st.markdown('''
+<u>추세선을 보았을 때 심박수가 낮을 수록 수면의 질이 높아지는 것을 확인할 수 있습니다.</u><br>
+일관되진 않지만 대부분의 점들이 추세선을 따라 왼쪽의 경우에는 위쪽에 분포해있고, 오른쪽의 경우에는 아래쪽에 분포해있는 것을 확인할 수 있습니다.<br>
+따라서 수면 시간과 수면의 질 사이에는 상관관계가 존재한다고 결론지을 수 있습니다.
+''', unsafe_allow_html=True)
 
-# 수면의 질 상위 그룹 필터링
-high_quality_sleep = data[data['Quality of Sleep'] >= 9]  # 수면의 질이 높은 그룹 (예: 4 이상)
+# 결합 산점도: 여러 요인과 수면의 질의 관계
+def plot_combined_scatter(data):
+    plt.figure(figsize=(15, 6))  # 그래프 크기 설정
 
-# 결측값 처리 (예: 제거)
-data = data.dropna()
+    # Stress Level vs. Quality of Sleep
+    x1 = data['Stress Level']
+    y = data['Quality of Sleep']
+    plt.scatter(x1, y, color='blue', label='Stress Level', alpha=0.7)
+    z1 = np.polyfit(x1, y, 1)
+    plt.plot(x1, np.poly1d(z1)(x1), color='blue', linestyle='--', label='Trend: Stress Level')
 
-# 'Heart Rate' 값을 10으로 나누어 축소
-data['Normalized Heart Rate'] = data['Heart Rate'] / 15
+    # Sleep Duration vs. Quality of Sleep
+    x2 = data['Sleep Duration']
+    plt.scatter(x2, y, color='green', label='Sleep Duration', alpha=0.7)
+    z2 = np.polyfit(x2, y, 1)
+    plt.plot(x2, np.poly1d(z2)(x2), color='green', linestyle='--', label='Trend: Sleep Duration')
 
+    # Normalized Heart Rate vs. Quality of Sleep
+    x3 = data['Heart Rate']
+    plt.scatter(x3, y, color='red', label='Heart Rate', alpha=0.7)
+    z3 = np.polyfit(x3, y, 1)
+    plt.plot(x3, np.poly1d(z3)(x3), color='red', linestyle='--', label='Trend: Heart Rate (Normalized)')
 
-# 그래프 생성: 수면의 질과 세 가지 요인 (Stress Level, Sleep Duration, Normalized Heart Rate)
-def plot_combined_scatter():
-    plt.figure(figsize=(6, 2))
+    plt.xlabel('Factors (Stress Leve(1~10lv)), Sleep Duration(h), Heart Rate(bpm))', fontsize=12)
+    plt.ylabel('Quality of Sleep', fontsize=12)
+    plt.title('Combined Scatter Plot of Sleep Quality by Factors', fontsize=14)
+    plt.legend(fontsize=10)
+    plt.grid(True)
+    st.pyplot(plt)
 
-    # 각 요인의 산점도를 동일한 그래프에 그림
-    sns.scatterplot(x='Stress Level', y='Quality of Sleep', data=data, color='blue', label='Stress Level')
-    sns.scatterplot(x='Sleep Duration', y='Quality of Sleep', data=data, color='green', label='Sleep Duration')
-    sns.scatterplot(x='Normalized Heart Rate', y='Quality of Sleep', data=data, color='red', label='Heart Rate (Normalized)')
     
-    plt.xlabel('Factors (Stress Level, Sleep Duration, Normalized Heart Rate)')
-    plt.ylabel('Quality of Sleep')
-    plt.title('Combined Scatter Plot of Sleep Quality by Factors')
-    plt.legend()
-    st.pyplot(plt)
-    plt.clf()  # 그래프를 출력한 후 클리어
 
-    # 'count', 'mean', 'std'를 제외하고 수면의 질이 높은 그룹의 특징 요약
-    high_quality_summary = high_quality_sleep[['Stress Level', 'Sleep Duration', 'Heart Rate', 'Quality of Sleep']].describe().drop(['count', 'mean', 'std'])
-
-    # Streamlit에 테이블 형식으로 출력
-    st.write("")
-    st.write("")
-    st.write("")
-    st.subheader(" Quality of Sleep이 높은 개인의 특징 🥰")
-    st.write(high_quality_summary)
-
-# 그래프 그리기 함수 호출
-plot_combined_scatter()
-
-# 공간 띄우기
+# 결합 산점도 출력
 st.write("")
 st.write("")
+st.subheader("요인별 Quality of Sleep의 결합 산점도 ➕")
+plot_combined_scatter(data)
 
-# 숙면을 위한 팁
+# 숙면 팁 제공
+st.write("")
+st.write("")
 container = st.container()
 container.markdown("---")
 
@@ -198,4 +177,3 @@ st.write("")
 st.write("")
 st.write("")
 st.write("출처: [스트레스 해소 방법 - 숙면](http://www.samsunghospital.com/webzine/smcdmedu/279/webzine_279_5.html)")
-

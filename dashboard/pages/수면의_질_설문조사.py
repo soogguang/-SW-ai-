@@ -7,7 +7,7 @@ import joblib
 # =========================
 @st.cache_resource
 def load_model():
-    return joblib.load("sleep_quality_model.pkl")
+    return joblib.load("dashboard/sleep_quality_model.pkl")
 
 model = load_model()
 
